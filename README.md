@@ -1,11 +1,6 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# Tool Integrations
 
-  <h1>Built with AI Studio</h2>
+The example scripts that were previously in this project (`computer-use.ts`, `file-search.ts`, etc.) were designed for a Node.js environment and are not compatible with this live browser-based sandbox. They have been disabled to allow the application to run correctly.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+The core application uses the Gemini API for code generation and the OpenAI API for web search functionality, which are configured to work within the browser.

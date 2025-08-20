@@ -1,0 +1,6 @@
+{
+  "name": "AIONEX Sandbox",
+  "description": "An AI-powered web development sandbox. Generate, edit, and preview HTML, CSS, and JavaScript with a hyper-competent Gemini agent.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
