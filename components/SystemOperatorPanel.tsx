@@ -78,6 +78,9 @@ const ContainerCard: React.FC<{
              <div className="text-xs mt-2 space-y-1">
                 <p><span className="font-semibold text-gray-400">Base:</span> {log.chosen_templates.base}</p>
                 <p><span className="font-semibold text-gray-400">UI:</span> {log.chosen_templates.ui.join(', ') || 'None'}</p>
+                {log.environment && Object.values(log.environment).some(v => v) && (
+                     <p><span className="font-semibold text-gray-400">Env:</span> {Object.keys(log.environment).filter(k => log.environment?.[k]).join(', ')}</p>
+                )}
             </div>
             <button onClick={() => setIsHistoryOpen(!isHistoryOpen)} className="text-xs text-[var(--neon-blue)] hover:underline mt-2 flex items-center gap-1">
                 <span>{isHistoryOpen ? 'Hide' : 'Show'} History</span>
@@ -98,6 +101,8 @@ const SystemOperatorPanel: React.FC<SystemOperatorPanelProps> = ({ fileSystem, o
     const [prompt, setPrompt] = useState('Build a fancy to-do app');
     const [selectedBase, setSelectedBase] = useState<string>('REACT');
     const [selectedUi, setSelectedUi] = useState<string[]>(['TAILWIND']);
+    const [apiName, setApiName] = useState('');
+    const [apiKey, setApiKey] = useState('');
 
     const existingContainers = useMemo(() => {
         return Object.keys(fileSystem)
@@ -121,12 +126,24 @@ const SystemOperatorPanel: React.FC<SystemOperatorPanelProps> = ({ fileSystem, o
             alert("Please provide a prompt and select a base template.");
             return;
         }
+        
+        const environment: Record<string, string> = {};
+        if (apiName.trim()) {
+            environment['API_NAME'] = apiName.trim();
+        }
+        if (apiKey.trim()) {
+            environment['API_KEY'] = apiKey.trim();
+        }
+
         const { newFiles, rootPath } = createContainer(
             'system_operator',
             prompt,
-            { base: selectedBase, ui: selectedUi, datastore: null }
+            { base: selectedBase, ui: selectedUi, datastore: null },
+            environment
         );
         onCreateContainer(newFiles, rootPath);
+        setApiName('');
+        setApiKey('');
     };
 
     return (
@@ -142,6 +159,25 @@ const SystemOperatorPanel: React.FC<SystemOperatorPanelProps> = ({ fileSystem, o
                         className="w-full bg-black/30 border border-[var(--card-border)] rounded-md p-2 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--neon-purple)]"
                         placeholder="Describe the app's goal..."
                      />
+                </div>
+                 <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1">Environment Variables</label>
+                    <div className="flex flex-col gap-2">
+                        <input
+                            type="text"
+                            value={apiName}
+                            onChange={e => setApiName(e.target.value)}
+                            className="w-full bg-black/30 border border-[var(--card-border)] rounded-md p-2 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--neon-purple)]"
+                            placeholder="API_NAME value (e.g. 'gemini-2.5-flash')"
+                         />
+                        <input
+                            type="password"
+                            value={apiKey}
+                            onChange={e => setApiKey(e.target.value)}
+                            className="w-full bg-black/30 border border-[var(--card-border)] rounded-md p-2 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--neon-purple)]"
+                            placeholder="API_KEY value"
+                         />
+                     </div>
                 </div>
                 <TemplateSelector 
                     title="Base Template"

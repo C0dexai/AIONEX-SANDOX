@@ -101,7 +101,8 @@ if (container) {
 export const createContainer = (
     operator: string, 
     prompt: string, 
-    selectedTemplates: { base: string, ui: string[], datastore: string | null }
+    selectedTemplates: { base: string, ui: string[], datastore: string | null },
+    environment?: Record<string, string>
 ): { newFiles: FileSystemState, rootPath: string } => {
     const containerId = `container_${uuidv4()}`;
     const rootPath = `/containers/${containerId}`;
@@ -139,6 +140,7 @@ export const createContainer = (
         operator: operator,
         prompt: prompt,
         chosen_templates: selectedTemplates,
+        environment,
         status: "initialized",
         created_at: now,
         history: [

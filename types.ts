@@ -58,6 +58,7 @@ export interface HandoverLog {
         ui: string[];
         datastore: string | null;
     };
+    environment?: Record<string, string>;
     status: string;
     created_at: string;
     history: HandoverLogEntry[];
